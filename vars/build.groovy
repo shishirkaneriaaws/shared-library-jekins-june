@@ -1,29 +1,21 @@
-pipeline{
-    tools{
+@Library('sharedlib')_
+pipeline {
+    agent any
+    tools {
         maven 'mymaven'
     }
-    agent any // any = any available server where jenkisn can run the pipleine
     
     stages{
-        stage('Checkout Code'){
+        stage('checkout code'){
             steps{
-                git 'https://github.com/Sonal0409/DevOpsCodeDemo.git'
+            repo 'https://github.com/Sonal0409/DevOpsCodeDemo.git'
             }
         }
-        stage('Compile Code'){
-            steps{
-                sh 'mvn compile'
-            }
-        }
-       stage('Review Code'){
-            steps{
-                sh 'mvn pmd:pmd'
-            }
-            post{
-                success{
-                    recordIssues sourceCodeRetention: 'LAST_BUILD', tools: [pmdParser(pattern: '**/pmd.xml')]
-                }
-            }
-        }
-    }
-}
+        
+       stage('Run maven Command'){
+           steps{
+               build 'Test'
+              filterlogs ('WARNING', 10 )
+           }
+       } 
+        
