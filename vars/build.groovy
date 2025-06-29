@@ -1,21 +1,20 @@
-@Library('sharedlib')_
-pipeline {
-    agent any
-    tools {
-        maven 'mymaven'
-    }
+def call(String mvnaction) {
     
-    stages{
-        stage('checkout code'){
-            steps{
-            repo 'https://github.com/Sonal0409/DevOpsCodeDemo.git'
-            }
-        }
-        
-       stage('Run maven Command'){
-           steps{
-               build 'Test'
-              filterlogs ('WARNING', 10 )
-           }
-       } 
-        
+       if ("${mvnaction}" == "Clean")
+                    {
+                    sh "mvn clean"
+                    }
+              else if ("${mvnaction}" == "Compile")
+                    {
+                    sh "mvn clean compile"
+                    }
+               else if ("${mvnaction}" == "Test")
+                    {
+                    sh "mvn clean test"
+                    }
+                 else if ("${mvnaction}" == "Install")
+                    {
+                    sh "mvn clean install"
+                    }
+
+}
